@@ -1,0 +1,15 @@
+version: '3.9'
+services:
+  my-express-app:
+    image: my-express-app
+    ports:
+      - "3000:3000"
+    container_name: app
+
+  react-app-1:
+    image: react-app-1
+    ports:
+      - "80:80"
+    container_name: react-app-1-container
+    depends_on:
+      - my-express-app

@@ -1,0 +1,68 @@
+{
+  "name": "my-express-app",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/my-express-app/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/my-express-app",
+        "main": "apps/my-express-app/src/main.ts",
+        "tsConfig": "apps/my-express-app/tsconfig.app.json",
+        "assets": ["apps/my-express-app/src/assets"],
+        "isolatedConfig": true,
+        "webpackConfig": "apps/my-express-app/webpack.config.js"
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "my-express-app:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "my-express-app:build:development"
+        },
+        "production": {
+          "buildTarget": "my-express-app:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/my-express-app/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/my-express-app/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    },
+    "docker-build": {
+      "dependsOn": ["build"],
+      "command": "docker build -f apps/my-express-app/Dockerfile . -t my-express-app"
+    }
+  },
+  "tags": []
+}

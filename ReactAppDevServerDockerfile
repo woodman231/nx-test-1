@@ -1,0 +1,8 @@
+FROM mcr.microsoft.com/devcontainers/typescript-node:1-20-bullseye
+RUN npm install -g nx
+VOLUME /workspace
+WORKDIR /workspace
+RUN nx --version
+RUN node --version
+RUN npm --version
+CMD [ "nx", "serve", "react-app-1" ]
